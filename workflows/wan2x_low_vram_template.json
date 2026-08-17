@@ -1,0 +1,51 @@
+{
+  "description": "Wan 2.x I2V Low-VRAM Pipeline",
+  "version": "1.0",
+  "generation_constraints": {
+    "frames": 17,
+    "resolution": {
+      "width": 832,
+      "height": 480
+    },
+    "sampling": {
+      "method": "FlowMatchEuler",
+      "steps_range": [20, 25],
+      "cfg": 5.5
+    }
+  },
+  "vae_decode_tiled": {
+    "tile_size": {
+      "width": 256,
+      "height": 256
+    },
+    "temporal": 8
+  },
+  "hardware_constraints": {
+    "vram_limit": "6GB",
+    "text_encoder": "UMT5-XXL (CPU, 8-bit)"
+  },
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UnetLoaderGGUF",
+      "properties": {
+        "model": "wan2.2-i2v-14B-Q3_K.gguf"
+      }
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "properties": {
+        "model": "UMT5-XXL.safetensors"
+      }
+    },
+    {
+      "id": 3,
+      "type": "VAEDecodeTiled",
+      "properties": {
+        "tile_size": 256,
+        "temporal": 8
+      }
+    }
+  ]
+}
